@@ -1,26 +1,46 @@
 @import "tailwindcss";
 
+/* Font imports */
+@import "@fontsource/roboto/400.css";
+@import "@fontsource/roboto/700.css";
+@import "@fontsource/crimson-text/400.css";
+@import "@fontsource/crimson-text/700.css";
+
+/* Light pastel smoothing */
+html, body {
+  -webkit-font-smoothing: antialiased;
+  color: #222;
+}
+
+/* Focus visible for accessibility */
+:focus-visible {
+  outline: 2px solid #6796ff;
+  outline-offset: 2px;
+}
+
 :root {
-  --background: #ffffff;
   --foreground: #171717;
+
+  /* Fonts for Tailwind theme */
+  --font-sans: "Roboto", system-ui, sans-serif;
+  --font-serif: "Crimson Text", serif;
 }
 
 @theme inline {
-  --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-sans);
+  --font-serif: var(--font-serif);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
     --foreground: #ededed;
   }
 }
 
+/* Apply variables */
 body {
-  background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
 }
