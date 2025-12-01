@@ -7,7 +7,6 @@ import Image from "next/image";
 const swimServiceSteps = [
   { label: "GROUP CLASSES", id: "group" },
   { label: "PRIVATE LESSONS", id: "private" },
-  { label: "PARENT & TOT", id: "parent-tot" },
   { label: "SWIM TEAM PREP", id: "swim-team" },
 ];
 
@@ -61,7 +60,7 @@ export default function Booking() {
           {/* LEFT SIDE — TEXT (Stacks on mobile) */}
           <div className="text-left">
 
-            <p className="text-sm font-semibold tracking-widest mb-2 text-gray-700 uppercase">
+            <p className="text-sm font-semibold tracking-widest mb-2 text-blue-500 uppercase">
               It's All Here
             </p>
 
@@ -112,11 +111,11 @@ export default function Booking() {
               content={
                 <div className="space-y-3">
                   <p className="text-gray-600">
-                    <span className="font-bold">1. Select Time:</span> View available
+                    <span className="font-bold">1. SELECT TIME:</span> View available
                     slots for {activeService.toUpperCase()} classes.
                   </p>
                   <p className="text-gray-600">
-                    <span className="font-bold">2. Select Instructor:</span> Choose
+                    <span className="font-bold">2. SELECT INSTRUCTOR:</span> Choose
                     your preferred coach based on ratings and availability.
                   </p>
                 </div>
@@ -138,7 +137,7 @@ export default function Booking() {
 
             <div className="mt-12">
               <button
-                className={`px-8 py-4 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition duration-300 ${primaryOrange}`}
+                className={`px-8 py-4 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition duration-300 bg-orange-500`}
               >
                 VIEW ALL PROGRAMS
               </button>

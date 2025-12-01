@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-// Using lucide-react names for common social and contact icons (assuming availability)
-import { MapPin, Mail, Phone, Facebook, Instagram, Twitter } from 'lucide-react'; 
+import { MapPin, Mail, Phone, Facebook, Instagram, Twitter, } from 'lucide-react'; 
+import { FaTiktok } from 'react-icons/fa';
 
 const footerLinks = {
   Services: [
@@ -74,7 +74,7 @@ export default function Footer() {
               Alraad Swim School
             </h2>
             <p className={`${footerSubText} max-w-sm`}>
-              Making waves in water safety and competitive swimming since 2015. Dive in and discover your potential.
+              Making waves in water safety and competitive swimming since 2019. Dive in and discover your potential.
             </p>
             
             {/* Newsletter CTA */}
@@ -112,7 +112,7 @@ export default function Footer() {
           <div className="space-y-3 order-2 md:order-1 text-center md:text-left">
             <div className="flex items-center justify-center md:justify-start">
               <MapPin className={`w-5 h-5 mr-3 ${primaryBlue}`} />
-              <p className={`${footerSubText} text-sm`}>123 Blue Water Way, Swim City, CA 90210</p>
+              <p className={`${footerSubText} text-sm`}>Nii Odonkor ii street, Accra, Ghana</p>
             </div>
             <div className="flex items-center justify-center md:justify-start">
               <Mail className={`w-5 h-5 mr-3 ${primaryBlue}`} />
@@ -120,13 +120,13 @@ export default function Footer() {
             </div>
             <div className="flex items-center justify-center md:justify-start">
               <Phone className={`w-5 h-5 mr-3 ${primaryBlue}`} />
-              <a href="tel:+15551234567" className={`${footerSubText} hover:${primaryBlue} transition text-sm`}>(555) 123-4567</a>
+              <a href="tel:+233508796216" className={`${footerSubText} hover:${primaryBlue} transition text-sm`}>(+233)50-879-6216</a>
             </div>
           </div>
           
           {/* Social Icons */}
           <div className="flex justify-center space-x-6 order-1 md:order-2">
-            {[Facebook, Instagram, Twitter].map((Icon, index) => (
+            {[Facebook, Instagram, Twitter, FaTiktok].map((Icon, index) => (
               <motion.a 
                 key={index}
                 href="#" 

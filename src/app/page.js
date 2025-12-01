@@ -4,7 +4,7 @@ import Instructors from "@/components/Instructors";
 import Booking from "@/components/Booking";
 import SwimAssetsSection from "@/components/SwimAssetSection";
 import SchedulePricing from "@/components/SchedulePricing";
-
+import Contact from "@/components/Contact";
 
 export default function Home() {
   return (
@@ -15,7 +15,7 @@ export default function Home() {
       <SwimAssetsSection/>
       <SchedulePricing/>
       <Booking/>
-      
+      <Contact/>
     </main>
   );
 }

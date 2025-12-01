@@ -68,7 +68,7 @@ export default function Instructors() {
               personalized approach to help you grow.
             </p>
             <div className="mt-8">
-              <button className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300">
+              <button className="px-6 py-3 bg-orange-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300">
                 MEET THE TEAM
               </button>
             </div>
@@ -136,10 +136,7 @@ export default function Instructors() {
           </div>
         </div>
 
-
-        {/* ============================= */}
         {/*          MOBILE VERSION       */}
-        {/* ============================= */}
         <div className="md:hidden mt-8">
           <h2 className="text-3xl font-serif text-gray-900 mb-4 text-center">
             Meet Our Instructors

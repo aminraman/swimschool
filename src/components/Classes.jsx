@@ -35,7 +35,7 @@ export default function Classes() {
     >
       <div className="max-w-7xl mx-auto px-6">
         {/* -------------------------------- */}
-        {/*            HEADER                */}
+        {/* HEADER 			 	*/}
         {/* -------------------------------- */}
         <div className="text-center mb-12 md:mb-16">
           <h2 className="text-4xl md:text-5xl font-serif text-black mb-4">
@@ -48,7 +48,7 @@ export default function Classes() {
         </div>
 
         {/* -------------------------------- */}
-        {/*          DESKTOP GRID            */}
+        {/* DESKTOP GRID 			*/}
         {/* -------------------------------- */}
         <div className="hidden md:grid md:grid-cols-3 gap-8">
           {classesData.map((cls, idx) => (
@@ -85,9 +85,10 @@ export default function Classes() {
 
                 <a
                   href="#contact"
-                  className="mt-auto inline-flex items-center justify-center px-12 py-3 rounded-full bg-[#007BFF] text-white font-semibold shadow-md hover:shadow-xl transition-all"
+                  // Reduced padding from px-12 py-3 to px-8 py-2
+                  className="mt-auto inline-flex items-center justify-center px-8 py-2 rounded-md bg-orange-500 hover:bg-[#007BFF] text-white font-semibold shadow-md hover:shadow-xl transition-all"
                 >
-                  BOOK NOW
+                  LEARN MORE
                 </a>
               </div>
             </motion.div>
@@ -95,7 +96,7 @@ export default function Classes() {
         </div>
 
         {/* -------------------------------- */}
-        {/*       MOBILE HORIZONTAL SCROLL   */}
+        {/* MOBILE HORIZONTAL SCROLL 	 */}
         {/* -------------------------------- */}
         <div className="md:hidden flex overflow-x-auto space-x-6 pb-6 -mx-6 px-6 scrollbar-none">
           {classesData.map((cls, idx) => (
@@ -132,9 +133,10 @@ export default function Classes() {
 
                 <a
                   href="#contact"
-                  className="mt-auto inline-flex items-center justify-center px-10 py-2 rounded-full bg-[#007BFF] text-white font-semibold shadow-md hover:shadow-xl transition-all text-sm"
+                  // Reduced padding from px-10 py-2 to px-8 py-2
+                  className="mt-auto inline-flex items-center justify-center px-8 py-2 rounded-md bg-[#007BFF] text-white font-semibold shadow-md hover:shadow-xl transition-all text-sm"
                 >
-                  BOOK NOW
+                  LEARN MORE
                 </a>
               </div>
             </motion.div>

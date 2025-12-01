@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function SwimAssetsFullWidthUncroppedSection() {
     const desktopImage = "/images/swim-assets-hero.png"; 
-    const mobileImage = "/images/mobile-assets.png"; // ← your vertical mobile image
+    const mobileImage = "/images/mobile-assets.png"; 
 
     return (
         <section className="py-0 w-full bg-white" id="swim-assets-full-width-uncropped">

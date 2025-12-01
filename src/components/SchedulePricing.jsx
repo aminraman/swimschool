@@ -1,120 +1,98 @@
 "use client";
 
-import React from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { motion } from "framer-motion";
+// CHANGED: Use imports from react-icons/fa
+import { FaBaby, FaWater, FaTrophy, FaGem } from 'react-icons/fa';
 
+
+const IconMap = {
+  Baby: FaBaby,
+  Waves: FaWater,
+  Trophy: FaTrophy,
+  Diamond: FaGem, 
+};
+
+// --- Data Structures ---
 const scheduleData = [
   { day: "Monday", time: "08:00 AM – 12:00 PM" },
-  { day: "Tuesday", time: "10:00 AM – 02:00 PM" },
+  { day: "Tuesday", time: "Closed" },
   { day: "Wednesday", time: "08:00 AM – 12:00 PM" },
   { day: "Thursday", time: "10:00 AM – 02:00 PM" },
   { day: "Friday", time: "08:00 AM – 12:00 PM" },
   { day: "Saturday", time: "09:00 AM – 01:00 PM" },
-  { day: "Sunday", time: "Closed" },
+  { day: "Sunday", time: "08:00 AM – 12:00 PM" },
 ];
 
 const pricingData = [
   {
     id: 1,
     title: "Intro Swimmer",
-    price: "$45",
+    price: "₵125",
     details: "Per 1-hour session",
     features: ["Focus on water safety", "Basic stroke introduction", "Fun group activities"],
-    buttonText: "Join Beginner",
-    icon: "👶",
+    buttonText: "JOIN BEGINNER",
+    icon: "Baby", 
   },
   {
     id: 2,
     title: "Skill Builder",
-    price: "$55",
+    price: "₵155",
     details: "Per 1-hour session",
     features: ["Refined stroke technique", "Endurance & breath control", "Small class sizes"],
-    buttonText: "Enroll Intermediate",
-    icon: "🏊",
+    buttonText: "ENROLL INTERMEDIATE",
+    icon: "Waves", 
   },
   {
     id: 3,
     title: "Pro-Track",
-    price: "$75",
+    price: "₵205",
     details: "Per 1.5-hour session",
     features: ["Advanced competitive drills", "Race strategy & turns", "Personalized coaching feedback"],
-    buttonText: "Go Advanced",
-    icon: "🥇",
+    buttonText: "GO ADVANCED",
+    icon: "Trophy", 
+  },
+  {
+    id: 4,
+    title: "Private Coaching",
+    price: "₵290",
+    details: "Per 1-hour session",
+    features: ["1-on-1 attention", "Customized training plan", "Video analysis"],
+    buttonText: "BOOK PRIVATE",
+    icon: "Diamond", 
   },
 ];
 
-const primaryBlue = "text-blue-600";
-const primaryBlueBg = "bg-blue-600";
-const shadowColor = "rgba(40, 40, 150, 0.2)"; // Custom shadow for stacking effect
+// --- Styling Variables ---
+const primaryBlue = "text-blue-600"; 
+const primaryBlueBg = "bg-blue-600"; 
+const darkCardBg = "bg-[#093557]"; 
+const accentOrangeBg = "bg-orange-500"; 
 
 export default function SchedulePricing() {
-  const [activeIndex, setActiveIndex] = React.useState(0);
-  const scheduleRef = React.useRef(null);
-  // Use a string state to manage the dynamic height style
-  const [cardHeightStyle, setCardHeightStyle] = React.useState('500px'); 
+  const scheduleRef = useRef(null);
+  const [scheduleHeight, setScheduleHeight] = useState('auto');
 
-  // State update to match the schedule table height for a perfect 50/50 visual split
-  React.useEffect(() => {
+  // Effect to calculate the height of the schedule table and apply it to the pricing container
+  useEffect(() => {
     const calculateHeight = () => {
-      if (scheduleRef.current) {
-        // Calculate the height of the entire schedule block (header + table + button padding)
-        const newHeight = scheduleRef.current.offsetHeight;
-        setCardHeightStyle(`${newHeight}px`);
+      // Only apply custom height on screens 1024px or wider (lg breakpoint)
+      if (window.innerWidth >= 1024 && scheduleRef.current) {
+        // We use scrollHeight to get the full height, including padding/margin if any
+        setScheduleHeight(`${scheduleRef.current.scrollHeight}px`);
+      } else {
+        setScheduleHeight('auto');
       }
     };
 
     calculateHeight();
-    // Re-calculate on window resize
     window.addEventListener('resize', calculateHeight);
     return () => window.removeEventListener('resize', calculateHeight);
   }, []);
 
-  const handleCardFlip = () => {
-    // Simply update the index. The nested motion.div handles the visual flip animation.
-    setActiveIndex((prevIndex) => (prevIndex + 1) % pricingData.length);
-  };
-  
-  const activePlanTitle = pricingData[activeIndex].title;
-  const nextPlanTitle = pricingData[(activeIndex + 1) % pricingData.length].title;
-
-  // Framer Motion variant for the card stacking and depth
-  const cardVariants = {
-    // Hidden (cards that have already been 'flipped' out)
-    hidden: {
-        y: 0,
-        scale: 1,
-        opacity: 0,
-        zIndex: 0,
-        boxShadow: "none",
-        pointerEvents: 'none',
-        transition: { duration: 0.5 }
-    },
-    // Visible Stacked (cards waiting their turn)
-    stacked: (custom) => ({
-        y: custom.offset * 15, // Spread cards out vertically by 15px
-        scale: 1 - custom.offset * 0.04, // Scale down slightly
-        opacity: 0.7 + custom.offset * 0.1,
-        zIndex: 100 - custom.offset, // Higher cards have higher z-index
-        boxShadow: `0 ${custom.offset * 6}px 12px ${shadowColor}`, // Shadow adds depth
-        pointerEvents: 'none',
-        transition: { type: "spring", stiffness: 300, damping: 30, delay: custom.delay }
-    }),
-    // Active (card on top, clickable)
-    active: {
-        y: 0,
-        scale: 1,
-        opacity: 1,
-        zIndex: 100,
-        boxShadow: `0 10px 20px ${shadowColor}`,
-        pointerEvents: 'auto',
-        transition: { type: "spring", stiffness: 300, damping: 30 }
-    }
-  };
-
-
   return (
-    <section className="py-24 bg-gradient-to-br from-white to-blue-50" id="schedule-pricing-balanced">
-      <div className="max-w-7xl mx-auto px-6">
+    <section className="bg-white" id="schedule-pricing-horizontal-split">
+      <div className="max-w-7xl mx-auto px-6 py-24">
         
         {/* Main Section Heading */}
         <div className="text-center mb-16">
@@ -129,24 +107,31 @@ export default function SchedulePricing() {
           </p>
         </div>
 
-        {/* 50/50 Grid Layout: Uses horizontal scroll on mobile, grid on large screens */}
-        <div className="flex flex-row overflow-x-auto lg:grid lg:grid-cols-2 gap-12 lg:gap-16 items-start pb-4">
+        {/* CONTAINER: Rounded Wrapper for the whole section, uses lg:grid lg:grid-cols-2 */}
+        <div className="flex flex-col lg:grid lg:grid-cols-2 gap-0 bg-white rounded-3xl overflow-hidden shadow-2xl border border-gray-100">
           
-          {/* LEFT SIDE: WEEKLY SCHEDULE TABLE (50% Width) - Mobile width added */}
-          <div ref={scheduleRef} className="min-w-[90vw] lg:min-w-0">
-            <h3 className="text-3xl font-serif text-gray-900 mb-8 text-left">
-              Weekly Class Schedule
-            </h3>
+          {/* LEFT SECTION (Column 1): Weekly Schedule Table */}
+          {/* Apply the calculated height via style to ensure it dictates the overall height on desktop */}
+          <div 
+            ref={scheduleRef} 
+            className="p-8 md:p-12 lg:p-16 flex flex-col justify-start"
+          >
+            <div className="flex flex-col md:flex-row justify-between items-end mb-8">
+                <h3 className="text-3xl font-serif text-gray-900 text-left">
+                Weekly Class Schedule
+                </h3>
 
-            <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+            </div>
+
+            <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
                 <div className="overflow-x-auto min-w-full">
                     <table className="min-w-full divide-y divide-gray-100">
                       <thead className="bg-blue-50">
                         <tr>
-                          <th className="px-6 py-4 text-left text-base font-bold text-gray-800 uppercase tracking-wider w-1/2 rounded-tl-2xl">
+                          <th className="px-6 py-4 text-left text-base font-bold text-gray-800 uppercase tracking-wider w-1/2">
                             Day
                           </th>
-                          <th className="px-6 py-4 text-right text-base font-bold text-gray-800 uppercase tracking-wider w-1/2 rounded-tr-2xl">
+                          <th className="px-6 py-4 text-right text-base font-bold text-gray-800 uppercase tracking-wider w-1/2">
                             Times Available
                           </th>
                         </tr>
@@ -155,17 +140,17 @@ export default function SchedulePricing() {
                         {scheduleData.map((item, idx) => (
                           <motion.tr
                             key={idx}
-                            initial={{ opacity: 0, x: -10 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.5, delay: idx * 0.05 }}
-                            viewport={{ once: true, amount: 0.5 }}
+                            initial={{ opacity: 0, y: 10 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.3, delay: idx * 0.05 }}
+                            viewport={{ once: true }}
                             className="hover:bg-blue-50/50 transition duration-200"
                           >
                             <td className="px-6 py-4 whitespace-nowrap w-1/2">
-                              <span className={`font-semibold ${item.day === 'Sunday' ? 'text-gray-500' : 'text-gray-900'}`}>{item.day}</span>
+                              <span className={`font-semibold ${item.day === 'Tuesday' ? 'text-gray-500' : 'text-gray-900'}`}>{item.day}</span>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-right w-1/2">
-                              <span className={`font-semibold ${item.day === 'Sunday' ? 'text-red-500' : 'text-blue-700'}`}>{item.time}</span>
+                              <span className={`font-semibold ${item.day === 'Tuesday' ? 'text-red-500' : 'text-blue-700'}`}>{item.time}</span>
                             </td>
                           </motion.tr>
                         ))}
@@ -173,115 +158,94 @@ export default function SchedulePricing() {
                     </table>
                 </div>
             </div>
-            
-            <div className="mt-10 text-center lg:text-left">
-                <button className={`px-8 py-4 ${primaryBlueBg} text-white font-bold rounded-full shadow-lg hover:shadow-xl transition duration-300`}>
-                    VIEW ALL SCHEDULES
-                </button>
-            </div>
           </div>
 
-          {/* RIGHT SIDE: PRICING CARDS (50% Width) - Mobile width added */}
+          {/* RIGHT SECTION (Column 2): Horizontal Scrolling Pricing Cards */}
           <div 
-            className="relative min-w-[90vw] h-auto lg:h-[--card-height] lg:min-w-0" 
-            style={{ 
-              '--card-height': cardHeightStyle, 
-              perspective: '1000px' // Enable 3D perspective for the flip effect
-            }}
+            className={`${darkCardBg} p-8 md:p-12 lg:p-16 relative overflow-hidden flex flex-col`}
+            // Apply the calculated height to ensure the two columns are perfectly aligned
+            style={{ height: scheduleHeight }} 
           >
-            <h3 className="text-3xl font-serif text-gray-900 mb-8 text-left absolute top-0 w-full z-20 bg-blue-50 lg:bg-transparent">
-              Flexible Pricing Plans
+            {/* Background decoration */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full -mr-32 -mt-32 blur-3xl"></div>
+
+            <h3 className="text-3xl font-serif text-white mb-8 text-left relative z-10">
+              Select Your Plan
             </h3>
             
-            {/* 3D Stacked Card Container - Needs pt-16 to offset the h3 title */}
-            <div className="relative w-full h-full pt-16">
+            {/* Horizontal Scroll Container */}
+            <div 
+                // The pricing container is flex-grow to take up the remaining height in the dark section
+                className="flex-grow flex overflow-x-auto space-x-6 pb-8 snap-x snap-mandatory scrollbar-hide relative z-10"
+                style={{ scrollBehavior: 'smooth' }}
+            >
               {pricingData.map((plan, idx) => {
-                const offset = idx - activeIndex;
-                const isHidden = offset < 0 || offset > 2;
-                const isActive = offset === 0;
-
+                // Dynamically retrieve the icon component using the IconMap
+                const IconComponent = IconMap[plan.icon];
+                
                 return (
                   <motion.div
                     key={plan.id}
-                    layout // Enables smooth layout transitions for stacking
-                    custom={{ offset: offset, delay: isHidden ? 0 : offset * 0.1 }}
-                    initial="stacked"
-                    animate={isActive ? "active" : isHidden ? "hidden" : "stacked"}
-                    variants={cardVariants}
-                    style={{ 
-                        // Match the schedule ref height exactly for visual parity (Subtract header offset)
-                        height: `calc(var(--card-height) - 64px)`, 
-                        width: '100%',
-                        transformOrigin: 'top center',
-                        // Hide element on mobile for natural flow, show only on active state if height is auto
-                        display: isHidden && window.innerWidth < 1024 ? 'none' : 'block',
-                    }}
-                    // A11Y Enhancements are handled by the inner button
-                    className={`absolute inset-0 bg-white rounded-2xl p-8 border border-blue-100 transition-all duration-500 ease-in-out ${isActive ? 'cursor-pointer' : 'pointer-events-none'}`}
+                    initial={{ opacity: 0, x: 50 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.5, delay: idx * 0.1 }}
+                    viewport={{ once: true }}
+                    // Card Styles
+                    // h-full ensures the card fills the height of the scroll container
+                    className="flex-none w-[85vw] md:w-[350px] snap-center bg-white rounded-2xl p-8 shadow-xl border border-blue-100 flex flex-col justify-between h-full"
                   >
-                    <div className={`absolute top-0 left-0 w-full h-2 ${primaryBlueBg} rounded-t-2xl`}></div>
+                      <div>
+                          <div className={`w-full h-1.5 ${primaryBlueBg} rounded-full mb-6`}></div>
+                          <div className="flex justify-between items-start mb-4">
+                              {/* RENDER THE REACT ICON HERE - Removed strokeWidth={2} */}
+                              {IconComponent && (
+                                <IconComponent 
+                                    className={`w-8 h-8 text-orange-500`} 
+                                />
+                              )}
+                              {idx === 1 && <span className="bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-1 rounded-full">POPULAR</span>}
+                          </div>
+                          
+                          <h4 className="font-serif text-2xl text-gray-900 mb-1 font-bold">
+                            {plan.title}
+                          </h4>
 
-                    {/* NESTED MOTION.DIV: Controls the visually appealing 3D flip-in */}
-                    <motion.div
-                        key={plan.id + activeIndex} // New key forces re-initialization when index changes
-                        initial={{ 
-                            // Only incoming card starts rotated (unless it's the first card on mount)
-                            rotateY: isActive && activeIndex !== 0 ? -180 : 0, 
-                        }}
-                        animate={{ 
-                            rotateY: 0, // All content rotates to 0
-                        }}
-                        transition={{ duration: 0.6, ease: "easeInOut" }}
-                        style={{ transformStyle: "preserve-3d", backfaceVisibility: "hidden" }} // Critical for 3D illusion
-                        className="h-full flex flex-col justify-between"
-                    >
-                        {/* Card Content */}
-                        <div className="text-center">
-                            <div className="text-5xl mb-4">{plan.icon}</div>
-                            <h4 className="font-serif text-2xl text-gray-900 mb-2 font-bold">
-                              {plan.title}
-                            </h4>
-
-                            <p className={`text-4xl font-sans font-extrabold ${primaryBlue} mb-2`}>
+                          <div className="flex items-baseline mb-4">
+                              <p className={`text-3xl font-sans font-extrabold ${primaryBlue}`}>
                               {plan.price}
-                            </p>
+                              </p>
+                              <span className="text-gray-500 text-sm ml-2">/ session</span>
+                          </div>
 
-                            <p className="text-sm text-gray-600 mb-8">{plan.details}</p>
+                          <ul className="text-left text-gray-700 space-y-3 mb-8">
+                              {plan.features.map((feature, fIdx) => (
+                                  <li key={fIdx} className="flex items-start text-sm">
+                                    <span className={`mr-2 mt-0.5 ${primaryBlue}`}>✓</span> 
+                                    <span className="leading-snug">{feature}</span>
+                                  </li>
+                              ))}
+                          </ul>
+                      </div>
 
-                            <ul className="text-left text-gray-700 space-y-2 mb-8">
-                                {plan.features.map((feature, fIdx) => (
-                                  <motion.li key={fIdx} className="flex items-center text-sm" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 + fIdx * 0.1 }}>
-                                    <span className={`mr-2 ${primaryBlue}`}>✓</span> {feature}
-                                  </motion.li>
-                                ))}
-                            </ul>
-                        </div>
-
-                        {/* CTA/Flip trigger button */}
-                        <div className="mt-auto pt-4"> {/* mt-auto pushes button to the bottom */}
-                            <button
-                                onClick={isActive ? handleCardFlip : undefined}
-                                role="button"
-                                tabIndex={isActive ? 0 : -1}
-                                aria-label={isActive ? `Current plan: ${activePlanTitle}. Click to view next plan: ${nextPlanTitle}` : undefined}
-                                className={`inline-block w-full px-8 py-3 rounded-full ${primaryBlueBg} text-white font-bold hover:bg-blue-700 transition duration-300 ${isActive ? '' : 'opacity-0 pointer-events-none'}`}
-                            >
-                                {plan.buttonText}
-                                {isActive && <span className="ml-2">→</span>}
-                            </button>
-                            {/* Flip indicator */}
-                            {isActive && (
-                                <p className="text-center text-xs text-gray-500 mt-2 hover:text-blue-500 transition duration-200" onClick={handleCardFlip}>
-                                    Tap/Click to see next plan
-                                </p>
-                            )}
-                        </div>
-                    </motion.div>
+                      <button
+                          className={`w-full py-3 rounded-lg ${accentOrangeBg} text-white font-bold hover:bg-orange-600 hover:shadow-lg transition duration-300 transform hover:-translate-y-0.5`}
+                      >
+                          {plan.buttonText}
+                      </button>
                   </motion.div>
                 );
               })}
+              
+              {/* Spacer at the end for better scrolling experience */}
+              <div className="w-4 flex-none"></div>
+            </div>
+            
+            {/* Scroll Hint (Mobile) */}
+            <div className="md:hidden text-center mt-2">
+                <span className="text-blue-200 text-xs animate-pulse">← Swipe to view more plans →</span>
             </div>
           </div>
+
         </div>
       </div>
     </section>
